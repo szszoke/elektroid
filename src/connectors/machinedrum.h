@@ -1,6 +1,6 @@
 /*
- *   sds.h
- *   Copyright (C) 2022 David García Goñi <dagargo@gmail.com>
+ *   machinedrum.h
+ *   Copyright (C) 2024 David García Goñi <dagargo@gmail.com>
  *
  *   This file is part of Elektroid.
  *
@@ -18,23 +18,11 @@
  *   along with Elektroid. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SDS_H
-#define SDS_H
+#ifndef MACHINEDRUM_H
+#define MACHINEDRUM_H
 
 #include "backend.h"
 
-gint sds_handshake (struct backend *);
-
-gint sds_download (struct backend *, const gchar *, GByteArray *,
-		   struct job_control *);
-
-gint sds_upload_16b (struct backend *, const gchar *, GByteArray *,
-		     struct job_control *);
-
-gint sds_sample_load (const gchar *, GByteArray *, struct job_control *);
-
-gint sds_sample_save (const gchar *, GByteArray *, struct job_control *);
-
-gint sds_rename (struct backend *, const gchar *, const gchar *);
+gint machinedrum_handshake (struct backend *);
 
 #endif

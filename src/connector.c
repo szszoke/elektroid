@@ -25,6 +25,7 @@
 #include "connectors/microbrute.h"
 #include "connectors/microfreak.h"
 #include "connectors/cz.h"
+#include "connectors/machinedrum.h"
 #include "connectors/sds.h"
 #include "connectors/efactor.h"
 #include "connectors/phatty.h"
@@ -63,6 +64,12 @@ static const struct connector CONNECTOR_CZ = {
   .regex = NULL
 };
 
+static const struct connector CONNECTOR_MACHINEDRUM = {
+  .handshake = machinedrum_handshake,
+  .name = "machinedrum",
+  .regex = NULL
+};
+
 static const struct connector CONNECTOR_SDS = {
   .handshake = sds_handshake,
   .name = "sds",
@@ -95,8 +102,8 @@ static const struct connector CONNECTOR_DEFAULT = {
 
 static const struct connector *CONNECTORS[] = {
   &CONNECTOR_ELEKTRON, &CONNECTOR_MICROBRUTE, &CONNECTOR_MICROFREAK,
-  &CONNECTOR_PHATTY, &CONNECTOR_SUMMIT, &CONNECTOR_CZ, &CONNECTOR_SDS,
-  &CONNECTOR_EFACTOR, &CONNECTOR_DEFAULT, NULL
+  &CONNECTOR_PHATTY, &CONNECTOR_SUMMIT, &CONNECTOR_CZ, &CONNECTOR_MACHINEDRUM,
+  &CONNECTOR_SDS, &CONNECTOR_EFACTOR, &CONNECTOR_DEFAULT, NULL
 };
 
 // A handshake function might return these values:

@@ -598,7 +598,7 @@ end:
   return err;
 }
 
-static gint
+gint
 sds_download (struct backend *backend, const gchar *path,
 	      GByteArray *output, struct job_control *control)
 {
@@ -732,7 +732,7 @@ sds_get_rename_sample_msg (guint id, const gchar *name)
   return tx_msg;
 }
 
-static gint
+gint
 sds_rename (struct backend *backend, const gchar *src, const gchar *dst)
 {
   GByteArray *tx_msg, *rx_msg;
@@ -948,7 +948,7 @@ sds_upload_14b (struct backend *backend, const gchar *path,
   return sds_upload (backend, path, input, control, 14);
 }
 
-static gint
+gint
 sds_upload_16b (struct backend *backend, const gchar *path,
 		GByteArray *input, struct job_control *control)
 {
@@ -1024,7 +1024,7 @@ sds_sample_load_with_rate (const gchar *path, GByteArray *sample,
   return res;
 }
 
-static gint
+gint
 sds_sample_load (const gchar *path, GByteArray *sample,
 		 struct job_control *control)
 {
@@ -1059,7 +1059,7 @@ sds_sample_load_8 (const gchar *path, GByteArray *sample,
   return sds_sample_load_with_rate (path, sample, control, 8000);
 }
 
-static gint
+gint
 sds_sample_save (const gchar *path, GByteArray *sample,
 		 struct job_control *control)
 {
