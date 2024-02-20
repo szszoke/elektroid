@@ -121,6 +121,7 @@ machinedrum_handshake (struct backend *backend)
   backend->filesystems = FS_SAMPLE_MACHINEDRUM;
   backend->fs_ops = FS_MACHINEDRUM_OPERATIONS;
   backend->data = sds_data;
+  backend->destroy_data = backend_destroy_data;
   snprintf (backend->name, LABEL_MAX, "Elektron MachineDrum");
 
 end:
