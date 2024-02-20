@@ -25,6 +25,7 @@
 #define MACHINEDRUM_SAMPLE_LIMIT 128
 #define MACHINEDRUM_SAMPLE_NAME_MAX_LEN 16
 #define MACHINEDRUM_GLOBAL_SETTINGS_LEN 197
+#define MACHINEDRUM_REST_TIME_DEFAULT 20000
 
 static const guint8 MACHINEDRUM_GLOBAL_SETTINGS_REQUEST[] =
   { 0xf0, 0, 0x20, 0x3c, 2, 0, 0x51, 0, 0xf7 };
@@ -38,18 +39,19 @@ static gint
 machinedrum_read_dir (struct backend *backend, struct item_iterator *iter,
 		      const gchar *path, const gchar **extensions)
 {
-  struct common_simple_read_dir_data *data;
+  struct sds_iterator_data *data;
 
   if (strcmp (path, "/"))
     {
       return -ENOTDIR;
     }
 
-  data = g_malloc (sizeof (struct common_simple_read_dir_data));
+  data = g_malloc (sizeof (struct sds_iterator_data));
   data->next = 0;
+  data->backend = backend;
   data->max = MACHINEDRUM_SAMPLE_LIMIT;
   iter->data = data;
-  iter->next = common_simple_next_dentry;
+  iter->next = sds_next_sample_dentry;
   iter->free = g_free;
 
   return 0;
@@ -96,6 +98,7 @@ machinedrum_handshake (struct backend *backend)
 {
   gint len, err = 0;
   GByteArray *tx_msg, *rx_msg;
+  struct sds_data *sds_data;
 
   tx_msg = machinedrum_get_global_settings_dump_msg (0);
   rx_msg = backend_tx_and_rx_sysex (backend, tx_msg,
@@ -111,8 +114,13 @@ machinedrum_handshake (struct backend *backend)
       goto end;
     }
 
+  sds_data = g_malloc (sizeof (struct sds_data));
+  sds_data->rest_time = MACHINEDRUM_REST_TIME_DEFAULT;
+  sds_data->name_extension = FALSE;
+
   backend->filesystems = FS_SAMPLE_MACHINEDRUM;
   backend->fs_ops = FS_MACHINEDRUM_OPERATIONS;
+  backend->data = sds_data;
   snprintf (backend->name, LABEL_MAX, "Elektron MachineDrum");
 
 end:

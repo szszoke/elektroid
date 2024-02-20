@@ -23,6 +23,19 @@
 
 #include "backend.h"
 
+struct sds_data
+{
+  gint rest_time;
+  gboolean name_extension;
+};
+
+struct sds_iterator_data
+{
+  guint32 next;
+  guint32 max;
+  struct backend *backend;
+};
+
 gint sds_handshake (struct backend *);
 
 gint sds_download (struct backend *, const gchar *, GByteArray *,
@@ -36,5 +49,7 @@ gint sds_sample_load (const gchar *, GByteArray *, struct job_control *);
 gint sds_sample_save (const gchar *, GByteArray *, struct job_control *);
 
 gint sds_rename (struct backend *, const gchar *, const gchar *);
+
+gint sds_next_sample_dentry (struct item_iterator *);
 
 #endif

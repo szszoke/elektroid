@@ -44,18 +44,6 @@
 #define SDS_SAMPLE_CHANNELS 1
 #define SDS_SAMPLE_NAME_MAX_LEN 127
 
-struct sds_data
-{
-  gint rest_time;
-  gboolean name_extension;
-};
-
-struct sds_iterator_data
-{
-  guint32 next;
-  struct backend *backend;
-};
-
 static const guint8 SDS_SAMPLE_REQUEST[] = { 0xf0, 0x7e, 0, 0x3, 0, 0, 0xf7 };
 static const guint8 SDS_ACK[] = { 0xf0, 0x7e, 0, 0x7f, 0, 0xf7 };
 static const guint8 SDS_NAK[] = { 0xf0, 0x7e, 0, 0x7e, 0, 0xf7 };
@@ -955,13 +943,13 @@ sds_upload_16b (struct backend *backend, const gchar *path,
   return sds_upload (backend, path, input, control, 16);
 }
 
-static gint
+gint
 sds_next_sample_dentry (struct item_iterator *iter)
 {
   struct sds_iterator_data *iterator_data = iter->data;
   struct sds_data *data = iterator_data->backend->data;
 
-  if (iterator_data->next >= SDS_SAMPLE_LIMIT)
+  if (iterator_data->next >= iterator_data->max)
     {
       return -ENOENT;
     }
@@ -1000,6 +988,7 @@ sds_read_dir (struct backend *backend, struct item_iterator *iter,
 
   data = g_malloc (sizeof (struct sds_iterator_data));
   data->next = 0;
+  data->max = SDS_SAMPLE_LIMIT;
   data->backend = backend;
   iter->data = data;
   iter->next = sds_next_sample_dentry;
